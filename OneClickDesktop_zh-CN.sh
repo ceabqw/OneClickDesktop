@@ -371,8 +371,8 @@ Restart=always
 WantedBy=multi-user.target
 END
 	systemctl daemon-reload
-	systemctl start tomcat9
-	systemctl enable tomcat9
+	service tomcat9 start
+	service tomcat9 enable
 }
 	
 function install_guacamole_web
@@ -386,7 +386,7 @@ function install_guacamole_web
 	else
 		mv guacamole-$GUACAMOLE_VERSION.war /var/lib/tomcat9/webapps/guacamole.war
 	fi
-	systemctl restart tomcat9 guacd
+	service tomcat9 guacd restart
 	echo 
 	say @B"Guacamole Web应用成功安装！" green
 	echo 
@@ -453,7 +453,7 @@ END
 </user-mapping>
 END
 	fi
-	systemctl restart tomcat9 guacd
+	service tomcat9 guacd restart
 	say @B"Guacamole配置成功！" green
 	echo 
 }
@@ -503,7 +503,7 @@ END
 </user-mapping>
 END
 	fi
-	systemctl restart tomcat9 guacd
+	service tomcat9 guacd restart
 	say @B"Guacamole配置成功！" green
 	echo 
 }
@@ -566,8 +566,8 @@ END
 	vncserver
 	sleep 2
 	vncserver -kill :1
-	systemctl start vncserver@1.service
-	systemctl enable vncserver@1.service
+	service vncserver@1.service start
+	service vncserver@1.service enable
 	/usr/bin/vncconfig -display :1 &
 	cat > $HomeDir/Desktop/EnableCopyPaste.sh <<END
 #!/bin/bash
@@ -657,11 +657,11 @@ exec /bin/sh /etc/X11/Xsession
 END
 		chmod +x /etc/xrdp/startwm.sh
 	fi
-	systemctl enable xrdp
-	systemctl restart xrdp
+	service xrdp enable
+	service xrdp restart
 	sleep 5
 	echo "等待启动XRDP服务器..."
-	systemctl restart guacd
+	service guacd restart
 	cat > /etc/systemd/system/restartguacd.service <<END
 [Unit]
 Descript=Restart GUACD
@@ -676,7 +676,8 @@ WantedBy=multi-user.target
 
 END
 	systemctl daemon-reload
-	systemctl enable restartguacd
+	service enable guacd
+	service restart guacd
 	ss -lnpt | grep xrdp > /dev/null
 	if [ $? = 0 ] ; then
 		ss -lnpt | grep guacd > /dev/null
@@ -685,7 +686,7 @@ END
 		else 
 			say @B"XRDP与桌面环境配置成功!" green
 			sleep 3
-			systemctl start guacd
+			service guacd start
 		fi
 		echo 
 	else
@@ -728,7 +729,7 @@ function compile_xrdp_centos
 	sleep 2
 	make
 	make install
-	systemctl start xrdp
+	service xrdp start
 	echo 
 	ss -lnpt | grep xrdp >/dev/null
 	if [ $? = 0 ] ; then
