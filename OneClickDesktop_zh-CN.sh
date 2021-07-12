@@ -260,8 +260,8 @@ function install_guacamole_ubuntu_debian
 	echo "请耐心等待..."
 	echo 
 	systemctl daemon-reload
-	systemctl start guacd
-	systemctl enable guacd
+	service guacd start
+	service guacd enable
 	ss -lnpt | grep guacd >/dev/null
 	if [ $? = 0 ] ; then
 		say @B"Guacamole服务器安装成功！" green
