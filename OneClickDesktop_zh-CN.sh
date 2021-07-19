@@ -527,7 +527,9 @@ function install_vnc
 	sleep 2
 	echo 
 	mkdir $HomeDir/.vnc
-	cat > $HomeDir/.vnc/xstartup <<END
+	cat > $HomeDir/.vnc/xstartup
+	chmod +x $HomeDir/.vnc/xstartup <<END
+	
 #!/bin/bash
 
 xrdb $HomeDir/.Xresources
