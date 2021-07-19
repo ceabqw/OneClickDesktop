@@ -535,7 +535,7 @@ function install_vnc
 xrdb $HomeDir/.Xresources
 startxfce4 &
 END
-	cat > /etc/systemd/system/vncserver.service <<END
+	cat > /etc/systemd/system/vncserver@.service <<END
 [Unit]
 Description=a wrapper to launch an X server for VNC
 After=syslog.target network.target
@@ -568,8 +568,8 @@ END
 	vncserver
 	sleep 2
 	vncserver -kill :1
-	service vncserver.service start
-	service vncserver.service enable
+	service vncserver@1.service start
+	service vncserver@1.service enable
 	/usr/bin/vncconfig -display :1 &
 	cat > $HomeDir/Desktop/EnableCopyPaste.sh <<END
 #!/bin/bash
